@@ -76,6 +76,8 @@ Example of a connectivity config:
 }
 
 ```
+In the above example, the chip using tx 0 and rx 0 is enabled, meaning that transmission and reception will be established with that chip using the display port cable located in slot 0. Tx refers to transmission to the FE chip, while rx refers to reception of data from the FE chip. That chip will have a default configuration file made, called `rd53a_test.json`, located in the `configs/` folder. The chip on the tx/rx line 1 is ignored. 
+
 The "chipType" can be one of three: `RD53A`, `FEI4B`, or `FE65P2`.
 "chips" contains an array of chips, each element needs to contain the path to the config, and the tx and rx channel/link. Each chip can be read out individually by toggling "enable". The chip config can be prevented from overwriting if it is locked.
 
@@ -93,6 +95,15 @@ The scan config can be split in multiple parts:
   }
 }
 ```
+
+The `ChipId` and the chip `Name`, which will be the name used in the plots, are set in the `Parameters` section of the configuration file.
+```json
+"Parameter": {
+  "ChipId": 0,
+  "Name": "JohnDoe_0",            
+}
+```
+The default ChipId is 0 so please compare the wire-bonded chip ID with the one set in the configuration file.
 
 1. Analysis:
    

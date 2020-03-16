@@ -59,6 +59,7 @@ Success! No errors.
 
 **Resolve by:**
 
+- Check that the wire-bonded chip ID matches the number set in the configuration, `ChipId`. The default ChipId is 0 in the configuration, but for a triplet or a quad, each RD53a would be wire-bonded with a different number.
 - Try power-cycling the chip.
 - Make sure the DP cable is plugged into the right ports and you have selected the correct Tx/Rx links in the connectivity.
 - Meausure the analog regulator output voltage, if below 1.1V consider installing a Vref hack (ask experts).
