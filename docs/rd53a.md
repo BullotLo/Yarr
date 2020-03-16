@@ -247,8 +247,7 @@ The masSize are illustrated:
 ![maskSize settings](images/maskSize.png)
 
 The two different sensorType and the impact of maskSize are shown in the following images:
-![sensor typews](images/sensortype.png)
-![Checking bump bonding](images/crosstalk_sensortype.png)
+![sensor types and checking bump bonding](images/sensortype.png)
 
 Example of the s-curve, threshold distribution, threshold map and noise distribution for the tuned linear front-end are given below:
 ![S-curve threshold scan](images/JohnDoe_crosstalkscan_sCurve.png)

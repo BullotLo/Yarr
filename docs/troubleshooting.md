@@ -103,6 +103,16 @@ Jumper configuration for **direct powering**
 
 - Check that your enable mask is not all `0`
 
+
+### Problem with running scans with multiple chips
+
+## Cannot configure chip
+
+**Symptom:** Received wrong number of words (6)
+
+**Resolve by:** In Rd53a.cpp, change `data->words == 2 || data->words == 4` to include `|| data->words == 6`
+
+
 ## FE-I4 Troubleshooting
 
 ## FE65-P2 Troubleshooting
