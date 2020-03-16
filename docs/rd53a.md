@@ -498,13 +498,6 @@ An example configuration set to communicate with multiple FEs looks like this:
             "rx" : 2,
             "enable" : 1,
             "locked" : 0
-        },
-        {
-            "config" : "configs/rd53a_TripletB_IndCmdChipC.json",
-            "tx" : 3,
-            "rx" : 3,
-            "enable" : 1,
-            "locked" : 0
         }
     ]
 }
@@ -513,4 +506,45 @@ Each chip is given its own configuration file named, labeled under `config`. In 
 
 After running a scan or just running scanConsole without running a scan, a configuration for each chip will be created. The `ChipId` for each FE will be set to 0 (default). You must change this value to match the wire-bonded value in each configuration. More details about this can be found in [ScanConsole](scanconsole).
 
-### Running scans
+### Running scans with multiple chips
+The scans will be run on all chips that are enabled. If an error occurs, it will be associated with a number.
+```bash
+629258304 [1] Received data not valid: [17723,50400] = 0xcc53ff2f
+```
+In the above example, chip with tx/rx 1 did not receive valid data.
+
+## Multiple RD53a chips share one command line but different data lines
+An example would be:
+```json
+{
+    "chipType" : "RD53A",
+    "chips" : [
+
+        {
+            "config" : "configs/rd53a_Quad_ChipA.json",
+            "tx" : 0,
+            "rx" : 0,
+            "enable" : 1,
+            "locked" : 0
+        },
+        {
+            "config" : "configs/rd53a_Quad_ChipB.json",
+            "tx" : 0,
+            "rx" : 1,
+            "enable" : 1,
+            "locked" : 0
+        }
+    ]
+}
+```
+In the above configuration, the command will be sent using tx0 but each chip uses its own rx line.
+
+## Running quad modules
+To run quad modules, you need to set up the chips such that all 4 chips share one command line, as described above.
+
+If you have a 4-display port adaptor card, you only need to share the command line but can use different display ports for the return data.
+
+Additional changes for the quad module's chip configurations:
+
+- `ChipId`: the ChipId for each chip should be set according to wirebonding map (Chip1-1, Chip2-2,Chip3-3,Chip4-4)
+- `OutputActiveLanes`: 7 instead of 15 because only 3 data lanes are connected, not 4
