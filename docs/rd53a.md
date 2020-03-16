@@ -234,11 +234,21 @@ Config parameters:
  - max ``<int>``: number of mask stages
  - min ``<int>``: mask stage to start with
  - step ``<int>``: step size of mask stage (do not use a value lower than 64)
- - maskType  ``<int>``: for standard threshold scans (0), or for cross-talk (1,2, 4, depending on the cross-talk definition): 2 is for up/down neighbors, 4 is for all neighbors
+ - maskType  ``<int>``: for standard threshold scans (0), or for cross-talk (1 or 2 depending on the cross-talk definition)
  - maskSize  ``<int>``: define in which neighbouring pixels charge is injected
  - includedPixels ``<int>``: define if and which pixel edges are not considered to measure cross-talk 
  - sensorType  ``<int>``: square sensor (0), rectangular sensor with bump-bond (0,0) bonded with the pixel at the corner (1), and rectangular sensor with bump-bond (0,1) bonded with the pixel at the corner (2)
 
+The illustration below show the differences between the configurations of `maskType`:
+
+![maskType settings](images/mask.png)
+
+The masSize are illustrated:
+![maskSize settings](images/maskSize.png)
+
+The two different sensorType and the impact of maskSize are shown in the following images:
+![sensor typews](images/sensortype.png)
+![Checking bump bonding](images/crosstalk_sensortype.png)
 
 Example of the s-curve, threshold distribution, threshold map and noise distribution for the tuned linear front-end are given below:
 ![S-curve threshold scan](images/JohnDoe_crosstalkscan_sCurve.png)
