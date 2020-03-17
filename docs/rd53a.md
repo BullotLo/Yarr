@@ -23,6 +23,63 @@ After all jumpers are placed on the SCC, connect the DisplayPort cable to DP1 an
 
 Set the power supply to <span style="color:red">**1.8**</span> V, the current should be around 0.5 A and power on the chip. For the LDO operation, e.g. the jumper configuration shown in previous figure, make sure <span style="color:red"> not to apply higher voltage than **1.8 V**</span>.
 
+
+## Running RD53a in ShuLDO mode
+
+To see the SCC in shunt mode,
+
+### Loading shunt resistors
+![Locations of the shunt resistor ](images/shuntresistor.png)
+
+4 shunt resistors need to be soldered on the back of the SCC, pictured above:
+- RextA: analog external resistor, resistor that sets the slope for the analog shunt IV. The value of this resistor is `1.15k` ohm.
+- RextD: digital external resistor, resistor that sets the slope for the digital shunt IV. The value of this resistor is `1.07k` ohm.
+- RIoffsA: analog offset resistor, resistor that sets the offset for the analog IV curve. The value of this resistor is `232k` ohm.
+- RIoffsD: digital offset resistor, resistor that sets the offset for the digital IV curve. The value of this resistor is `226k` ohm.
+
+### Jumper configuration for shunt mode operation
+![Jumper configuration on the SCC ](images/shunt_jumper.png)
+
+In addition to soldering shunt resistors, jumpers are needed to select the ShuLDO operation mode.
+- VDD Shnt A and VDD Shnt D: select shunt mode operation
+- Rext A and Rext D: select slope resistors soldered on the SCC as opposed to the internal shunt resistors
+
+### Shunt mode operation
+LDO mode is set in <span style="color:red">constant voltage</span>, where the power supply voltage is set and the current consumed by the chip can be measured.
+
+In shunt mode, the power supply is set in <span style="color:red">constant current</span> mode. The maximum voltage is set to <span style="color:red">**1.8 V**</span>, and the current is set to <span style="color:red">**1.1 A**</span>. The current to the chip will be 1.1 A and the voltage measured is 1.6 V (less than the maximum value of 1.8V).
+
+All scans described above can be performed in shunt mode.
+
+
+## Running with multiple RD53a chips
+
+All subsequent scans assume single chip operation; however, when testing triplets or quads, there will be 3-4 FE ends. Operation will be the same as for a SCC except for the set-up.
+
+Here are some things to be mindful of as you are planning on running with multiple RD53a:
+
+- multiple PCIexpress cards: each PCIexpress card has its own `specNum`; therefore, the user needs to creat one specCfg.json per PCIExpress card.
+- setting up the configuration for whether each RD53a receives its own command or will share a command line. Both of these instances are described in [ScanConsole](scanconsole).
+- setting up the correct chipId for each RD53a in a triplet or a quad. After running a scan or just running scanConsole without running a scan, a configuration for each chip will be created. The `ChipId` for each FE will be set to 0 (default). You must change this value to match the wire-bonded value in each configuration. 
+
+### Running scans with multiple chips
+The scans will be run on all chips that are enabled. If an error occurs, it will be associated with a chip number.
+```bash
+629258304 [1] Received data not valid: [17723,50400] = 0xcc53ff2f
+```
+In the above example, chip with tx/rx 1 did not receive valid data.
+
+### Additional configuration changes for quad modules
+To run quad modules, you need to set up the chips such that all 4 chips share one command line. This is further described in [ScanConsole](scanconsole).
+
+If you have a 4-display port adaptor card, you only need to share the command line but can use different display ports for the return data.
+
+Additional changes for the quad module's chip configurations:
+
+- `ChipId`: the ChipId for each chip should be set according to wirebonding map (Chip1-1, Chip2-2,Chip3-3,Chip4-4)
+- `OutputActiveLanes`: 7 instead of 15 because only 3 data lanes are connected, not 4
+
+
 # Scan Console for RD53A
 
 The general structure of the Scan Console commands is:
@@ -431,119 +488,3 @@ The default values for the FEs in the chip configuration are
 - `EnCoreColSync`: 65535; enables each bit in the 16 core columns
 
 To disable a FE, you need to set the appropriate `EnCoreCol` to 0.
-
-# Running RD53a in ShuLDO mode
-
-To see the SCC in shunt mode,
-
-## Shunt resistors
-![Locations of the shunt resistor ](images/shuntresistor.png)
-
-4 shunt resistors need to be soldered on the back of the SCC, pictured above:
-- RextA: analog external resistor, resistor that sets the slope for the analog shunt IV. The value of this resistor is `1.15k` ohm.
-- RextD: digital external resistor, resistor that sets the slope for the digital shunt IV. The value of this resistor is `1.07k` ohm.
-- RIoffsA: analog offset resistor, resistor that sets the offset for the analog IV curve. The value of this resistor is `232k` ohm.
-- RIoffsD: digital offset resistor, resistor that sets the offset for the digital IV curve. The value of this resistor is `226k` ohm.
-
-## Jumper configuration
-![Jumper configuration on the SCC ](images/shunt_jumper.png)
-
-In addition to soldering shunt resistors, jumpers are needed to select the ShuLDO operation mode.
-- VDD Shnt A and VDD Shnt D: select shunt mode operation
-- Rext A and Rext D: select slope resistors soldered on the SCC as opposed to the internal shunt resistors
-
-## Shunt mode operation
-LDO mode is set in <span style="color:red">constant voltage</span>, where the power supply voltage is set and the current consumed by the chip can be measured.
-
-In shunt mode, the power supply is set in <span style="color:red">constant current</span> mode. The maximum voltage is set to <span style="color:red">**1.8 V**</span>, and the current is set to <span style="color:red">**1.1 A**</span>. The current to the chip will be 1.1 A and the voltage measured is 1.6 V (less than the maximum value of 1.8V).
-
-All scans described above can be performed in shunt mode.
-
-
-# Running with multiple RD53a chips
-
-Before, we described operation on a single-chip card; however, when testing triplets or quads, there will be 3-4 FE ends so operation is a little bit different.
-
-In case you run into problems running with multiple chips, please consult the troubleshooting page here: [Troubleshooting](troubleshooting)
-
-## Multiple PCIexpress cards
-Each PCIexpress card has its own `specNum`; therefore, the user needs to creat one specCfg.json per PCIExpress card. More details about the controller configurations can be found in [ScanConsole](scanconsole).
-
-## Each RD53a receives its own command
-For each chip to receive its own command, the connectivity configuration needs to specify the `tx`, `rx`, and `enable` for each chip. More explanations about these can be found in [ScanConsole](scanconsole).
-
-An example configuration set to communicate with multiple FEs looks like this:
-```json
-{
-    "chipType" : "RD53A",
-    "chips" : [
-        {
-            "config" : "configs/rd53a_TripletA_IndCmdChipA.json",
-            "tx" : 0,
-            "rx" : 0,
-            "enable" : 1,
-            "locked" : 0
-        },
-        {
-            "config" : "configs/rd53a_TripletA_IndCmdChipB.json",
-            "tx" : 1,
-            "rx" : 1,
-            "enable" : 0,
-            "locked" : 0
-        },
-        {
-            "config" : "configs/rd53a_TripletA_IndCmdChipC.json",
-            "tx" : 2,
-            "rx" : 2,
-            "enable" : 1,
-            "locked" : 0
-        }
-    ]
-}
-```
-Each chip is given its own configuration file named, labeled under `config`. In this example, the 2nd chip (tx/rx 1 is disabled) but all remaining chips are enabled.
-
-After running a scan or just running scanConsole without running a scan, a configuration for each chip will be created. The `ChipId` for each FE will be set to 0 (default). You must change this value to match the wire-bonded value in each configuration. More details about this can be found in [ScanConsole](scanconsole).
-
-### Running scans with multiple chips
-The scans will be run on all chips that are enabled. If an error occurs, it will be associated with a number.
-```bash
-629258304 [1] Received data not valid: [17723,50400] = 0xcc53ff2f
-```
-In the above example, chip with tx/rx 1 did not receive valid data.
-
-## Multiple RD53a chips share one command line but different data lines
-An example would be:
-```json
-{
-    "chipType" : "RD53A",
-    "chips" : [
-
-        {
-            "config" : "configs/rd53a_Quad_ChipA.json",
-            "tx" : 0,
-            "rx" : 0,
-            "enable" : 1,
-            "locked" : 0
-        },
-        {
-            "config" : "configs/rd53a_Quad_ChipB.json",
-            "tx" : 0,
-            "rx" : 1,
-            "enable" : 1,
-            "locked" : 0
-        }
-    ]
-}
-```
-In the above configuration, the command will be sent using tx0 but each chip uses its own rx line.
-
-## Running quad modules
-To run quad modules, you need to set up the chips such that all 4 chips share one command line, as described above.
-
-If you have a 4-display port adaptor card, you only need to share the command line but can use different display ports for the return data.
-
-Additional changes for the quad module's chip configurations:
-
-- `ChipId`: the ChipId for each chip should be set according to wirebonding map (Chip1-1, Chip2-2,Chip3-3,Chip4-4)
-- `OutputActiveLanes`: 7 instead of 15 because only 3 data lanes are connected, not 4

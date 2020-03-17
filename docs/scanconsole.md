@@ -52,6 +52,8 @@ Example of a controller config:
 ```
 The "type" specifies which hardware controller should be used. Any fields in the "cfg" field are specific the hardware and details can be found here: [TODO](todo)
 
+If you are running with multiple hardware controller. Each hardware controller should have its own controller configuration with the appropriate value for `specNum`.
+
 ### Connectivity Config
 Example of a connectivity config:
 ```json
@@ -80,6 +82,67 @@ In the above example, the chip using tx 0 and rx 0 is enabled, meaning that tran
 
 The "chipType" can be one of three: `RD53A`, `FEI4B`, or `FE65P2`.
 "chips" contains an array of chips, each element needs to contain the path to the config, and the tx and rx channel/link. Each chip can be read out individually by toggling "enable". The chip config can be prevented from overwriting if it is locked.
+
+#### Configuration for multiple FE chips with each FE receiving its own command line
+For each chip to receive its own command, the connectivity configuration needs to specify the `tx`, `rx`, and `enable` for each chip. 
+
+An example configuration set to communicate with multiple FEs looks like this:
+```json
+{
+    "chipType" : "RD53A",
+    "chips" : [
+        {
+            "config" : "configs/rd53a_TripletA_IndCmdChipA.json",
+            "tx" : 0,
+            "rx" : 0,
+            "enable" : 1,
+            "locked" : 0
+        },
+        {
+            "config" : "configs/rd53a_TripletA_IndCmdChipB.json",
+            "tx" : 1,
+            "rx" : 1,
+            "enable" : 0,
+            "locked" : 0
+        },
+        {
+            "config" : "configs/rd53a_TripletA_IndCmdChipC.json",
+            "tx" : 2,
+            "rx" : 2,
+            "enable" : 1,
+            "locked" : 0
+        }
+    ]
+}
+```
+Each chip is given its own configuration file named, labeled under `config`. In this example, the 2nd chip (tx/rx 1 is disabled) but all remaining chips are enabled.
+
+#### Configuration for multiple FE chips with each FE sharing one command line
+An example of this type of configuration is:
+```json
+{
+    "chipType" : "RD53A",
+    "chips" : [
+
+        {
+            "config" : "configs/rd53a_Quad_ChipA.json",
+            "tx" : 0,
+            "rx" : 0,
+            "enable" : 1,
+            "locked" : 0
+        },
+        {
+            "config" : "configs/rd53a_Quad_ChipB.json",
+            "tx" : 0,
+            "rx" : 1,
+            "enable" : 1,
+            "locked" : 0
+        }
+    ]
+}
+```
+In the above configuration, the command will be sent using tx0 but each chip uses its own rx line.
+
 
 ### Scan Config
 
