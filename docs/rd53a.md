@@ -26,7 +26,7 @@ Set the power supply to <span style="color:red">**1.8**</span> V, the current sh
 
 ## Running RD53a in ShuLDO mode
 
-To see the SCC in shunt mode,
+To run the SCC in shunt mode, shunt resistors needed to be appropriately loaded, as well as adding additional jumpers.
 
 ### Loading shunt resistors
 ![Locations of the shunt resistor ](images/shuntresistor.png)
