@@ -481,7 +481,7 @@ Config parameters:
 
 The default values for the FEs in the chip configuration are
 
-- `EnCoreColDiff1`: 65535; enables each bit in the 16 core columns (2^16 = 65535) 
+- `EnCoreColDiff1`: 65535; enables each bit in the 16 core columns 
 - `EnCoreColDiff2`: 1; enables the 17th core column
 - `EnCoreColLin1`: 65535; enables each bit in the 16 core columns
 - `EnCoreColLin2`: 1; enables the 17th core column
