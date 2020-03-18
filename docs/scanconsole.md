@@ -52,7 +52,7 @@ Example of a controller config:
 ```
 The "type" specifies which hardware controller should be used. Any fields in the "cfg" field are specific the hardware and details can be found here: [TODO](todo)
 
-If you are running with multiple hardware controller. Each hardware controller should have its own controller configuration with the appropriate value for `specNum`.
+If you are running with multiple PCIexpress cards, each should have its own controller configuration with the appropriate value for `specNum`.
 
 ### Connectivity Config
 Example of a connectivity config:
