@@ -29,7 +29,7 @@ ScanConsole normally requires at min. three types of configuration files (more d
 Note: If you omit the scan config, your chip will only be configurated.
 
 
-Additional command line arguements for the scanConsole are:
+Additional command line arguments for the scanConsole are:
     
 - **-h** : this, prints all available command line arguments
 - **-t  ``<target_charge>`` [``<target_tot>``]** : Set target values for threshold (charge only) and tot (charge and tot).
@@ -37,6 +37,7 @@ Additional command line arguements for the scanConsole are:
 - **-o ``<dir>``** : Output directory. (Default ./data/)
 - **-m ``<int>``** : 0 = disable pixel masking, 1 = reset pixel masking, default = enable pixel masking
 - **-k**: Report known items (Scans, Hardware etc.)
+- **-l ``<path>``** => Logger config : this points to a json file to configure the [logging](logging.json) system. The default is to print info, warnings and errors to the console with appropriate colorization.
 
 ### Controller Config
 Example of a controller config:
@@ -269,9 +270,9 @@ Example:
 The 'prescan' config includes specific FrontEnd registers which are necessary for the scan and overwrite whatever is in the chip config (however these values will not be transferred into the chip config, they only exist for the time of the scan). Register names in the 'prescan' need to match those in the chip configuration.
 Loop actions are specific to the FrontEnd type and are listed on the respective FrontEnd page:
     
-- [RD53A](rd53a)
-- [FE-I4](fei4)
-- [FE65-P2](fe65-p2)
+- [RD53A](rd53a.md)
+- [FE-I4](fei4.md)
+- [FE65-P2](fe65p2.md)
 
 **Important Notes:**
     
